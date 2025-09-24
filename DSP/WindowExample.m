@@ -35,4 +35,3 @@ subplot(2,1,1)
 plot((0:199)/100-1,s);
 subplot(2,1,2)
 plot(abs(fft(s)))
-
