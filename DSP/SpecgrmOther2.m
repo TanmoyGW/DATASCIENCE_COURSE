@@ -4,16 +4,18 @@ sampFreq = 1024;
 nSamples = 2048;
 timeVec = (0:(nSamples-1))/sampFreq;
 
-%% Quadratic chirp signal
+%% OtherDTS_2 signal
 % Signal parameters
-a1=10;
-a2=3;
-a3=10;
 A = 10;
+sigma = 0.2;
+mu = 0.5;
+a1 = 3;
+a2 = 2;
+a3 = 4;
 
 %%
 % Generate signal
-sigVec = crcbgenqcsig(timeVec,A,[a1,a2,a3]);
+sigVec = otherDTS_2(timeVec,A,sigma,mu,[a1,a2,a3]);
 
 %% 
 % Make spectrogram with different time-frequency resolution

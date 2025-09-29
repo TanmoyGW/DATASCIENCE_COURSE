@@ -43,6 +43,7 @@ subplot(2,1,1)
 hold on;
 plot(timeVec,sigVec);
 plot(timeVec,filtSig1);
+xlabel('Time (s)');
 
 subplot(2,1,2)
 hold on;
@@ -75,6 +76,7 @@ subplot(2,1,1)
 hold on;
 plot(timeVec,sigVec);
 plot(timeVec,filtSig2);
+xlabel('Time (s)');
 
 subplot(2,1,2)
 hold on;
@@ -97,6 +99,7 @@ subplot(2,1,1)
 hold on;
 plot(timeVec,sigVec);
 plot(timeVec,filtSig3);
+xlabel('Time (s)');
 
 subplot(2,1,2)
 hold on;
