@@ -20,7 +20,7 @@ nSamples = length(timeVec);
 % Generate the signal
 sigVec = crcbgenqcsig(timeVec,A,[a1,a2,a3]);
 
-%Plot the signal 
+%Plot the signal
 figure;
 plot(timeVec,sigVec,'Marker','.','MarkerSize',24);
 xlabel('Time (sec)');

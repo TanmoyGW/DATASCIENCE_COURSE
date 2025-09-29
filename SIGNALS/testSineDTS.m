@@ -4,18 +4,54 @@
 a1=10;
 A = 15;
 
-% Time samples: Sample interval is directly chosen.
-samplIntrvl = 0.004;
+% Instantaneous frequency after 1 sec is 
+maxFreq = a1;
+%Nyqust frequency guess: 2 * max. instantaneous frequency
+nyqFreq = 2*maxFreq;
+%Sampling frequency
+%samplFreq = 2*nyqFreq;
+samplFreq = 10*nyqFreq;
+samplIntrvl = 1/samplFreq;
+
+% Time samples
 timeVec = 0:samplIntrvl:1.0;
 
 % Number of samples
 nSamples = length(timeVec);
 
 % Generate the signal
-sigVec = SineDTS(timeVec,A,[a1]);
+sigVec = SineDTS(timeVec,A,a1);
 
 %Plot the signal 
 figure;
 plot(timeVec,sigVec,'Marker','.','MarkerSize',24);
 xlabel('Time (sec)');
 title('Sampled signal: Sine Wave');
+
+%Plot the periodogram
+%--------------
+%Length of data 
+dataLen = timeVec(end)-timeVec(1);
+%DFT sample corresponding to Nyquist frequency
+kNyq = floor(nSamples/2)+1;
+% Positive Fourier frequencies
+posFreq = (0:(kNyq-1))*(1/dataLen);
+% FFT of signal
+fftSig = fft(sigVec);
+% Discard negative frequencies
+fftSig = fftSig(1:kNyq);
+
+%Plot periodogram
+figure;
+plot(posFreq,abs(fftSig));
+xlabel('Frequency (Hz)');
+ylabel('|FFT|');
+title('Periodogram');
+
+% Plot spectrogram
+[S,F,T]=spectrogram(sigVec,42,41,[],samplFreq);
+figure;
+imagesc(T,F,abs(S));axis xy;
+xlabel('Time (sec)');
+ylabel('Frequency (Hz)');
+title('Spectrogram');

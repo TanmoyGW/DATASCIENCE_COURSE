@@ -1,0 +1,2 @@
+function sigVec = SumThreeSin(t,a1,a2,a3,f1_0,f2_0,f3_0,phi1_0,phi2_0,phi3_0)
+sigVec = a1 * sin(2 * pi * f1_0 * t + phi1_0) + a2 * sin(2 * pi * f2_0 * t + phi2_0) + a3 * sin(2 * pi * f3_0 * t + phi3_0);
