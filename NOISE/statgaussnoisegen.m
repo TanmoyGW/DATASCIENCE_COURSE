@@ -1,4 +1,4 @@
-function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
+function [inNoise,outNoise] = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
 %Generate a realization of stationary Gaussian noise with given 2-sided PSD
 %Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
 %Generates a realization Y of stationary gaussian noise with a target
@@ -21,4 +21,3 @@ b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
 % rng('default'); 
 inNoise = randn(1,nSamples);
 outNoise = sqrt(sampFreq)*fftfilt(b,inNoise);
-
