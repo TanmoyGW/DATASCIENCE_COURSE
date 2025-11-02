@@ -1,3 +1,5 @@
+%FIXME I do not understand how you addressed the trivariate case below. It
+%doesn't appear to be a solution to the general problem.
 clc; close all; clear;
 %Set the angle parameters
 theta_1 = 18; % in degrees
@@ -49,7 +51,12 @@ C = [1.00  0.50  0.20;
      0.20  0.40  1.13]; % Our desired C
 [Q,Lambda] = eig(C);
 A = Q*sqrt(Lambda);
+%SDM
+disp('Here is C:')
+disp(C);
 disp('Here is A:');
 disp(A);
 disp('Check A*A^T = C:');
 disp(A*A'); 
+%FIXME Use A to generate trial values from a trivariate normal distribution
+%with covariance matrix C
