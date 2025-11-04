@@ -1,8 +1,5 @@
 function [inData,outData] = taskWhiten(psdVals,fltrOrdr,sampFreq,data)
-%FIXME This function's documentation should not mention the mystery signal
-%The documentation should describe the actual functionality, which is
-%whitening in this case, and nothing more.
-% Whiten a given data containing CGN realisation and a mystery signal
+% Whiten a given data containing CGN realisation.
 % Y = taskWhiten(PSD,O,Fs,data)
 % Generates a realization Y of whitened data with a target
 % power spectral density given by the CGN PSD. Fs is the sampling frequency

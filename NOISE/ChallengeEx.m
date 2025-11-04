@@ -1,26 +1,26 @@
-%FIXME I do not understand how you addressed the trivariate case below. It
-%doesn't appear to be a solution to the general problem.
+% The mathematics for this trivariate case is provided in 
+% the file 'ChallengeExTheory.pdf'
 clc; close all; clear;
-%Set the angle parameters
+% Set the angle parameters
 theta_1 = 18; % in degrees
 theta_2 = 24;
 theta_3 = 53;
 
-%Correlation coefficients
+% Correlation coefficients
 rho_1 = sind(theta_2)*cosd(theta_1);
 rho_2 = cosd(theta_2)*cosd(theta_3);
 rho_3 = sind(theta_1)*sind(theta_3);
 rho = [rho_1, rho_2, rho_3];
 
-%Number of trials
+% Number of trials
 nTrials = 10000;
 
-%Trial values of uncorrelated Normal random variables
+% Trial values of uncorrelated Normal random variables
 X_1 = randn(1,nTrials);
 X_2 = randn(1,nTrials);
 X_3 = randn(1,nTrials);
 
-%Linear combinations
+% Linear combinations
 X = [X_1; X_2; X_3]';
 A = [sind(theta_1) cosd(theta_1) 0;
      0 sind(theta_2) cosd(theta_2);
@@ -30,11 +30,12 @@ Y_1 = Y(:,1);
 Y_2 = Y(:,2);
 Y_3 = Y(:,3);
 
-%Estimate correlation coefficient
+% Estimate correlation coefficient
 disp(['Predicted correlation coefficients: ',mat2str(rho)]);
 disp(corrcoef([Y_1(:),Y_2(:),Y_3(:)]));
 
-%Scatterplot
+% Scatterplot
+figure;
 plot3(Y_1,Y_2,Y_3,'.');
 axis tight;
 axis equal;
@@ -50,13 +51,25 @@ C = [1.00  0.50  0.20;
      0.50  1.25  0.40;
      0.20  0.40  1.13]; % Our desired C
 [Q,Lambda] = eig(C);
-A = Q*sqrt(Lambda);
-%SDM
+A_n = Q*sqrt(Lambda);
 disp('Here is C:')
 disp(C);
-disp('Here is A:');
-disp(A);
-disp('Check A*A^T = C:');
-disp(A*A'); 
-%FIXME Use A to generate trial values from a trivariate normal distribution
-%with covariance matrix C
+disp("Here is A_n:");
+disp(A_n);
+disp('Check A_n*A_n^T = C:');
+disp(A_n*A_n'); 
+% Now we use this A_new to generate trial values from a trivariate normal distribution
+% with covariance matrix C
+Y_n = X*A_n;
+Y1 = Y_n(:,1);
+Y2 = Y_n(:,2);
+Y3 = Y_n(:,3);
+
+% Scatterplot
+figure;
+plot3(Y1,Y2,Y3,'.');
+axis tight;
+axis equal;
+xlabel('Trial values of Y_1');
+ylabel('Trial values of Y_2');
+zlabel('Trial values of Y_3');
