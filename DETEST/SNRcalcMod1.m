@@ -1,4 +1,3 @@
-clc; clear; close;
 %% How to normalize a signal for a given SNR
 % We will normalize a signal such that the Likelihood ratio (LR) test for it has
 % a given signal-to-noise ratio (SNR) in noise with a given Power Spectral 
@@ -23,12 +22,14 @@ timeVec = (0:(nSamples-1))/sampFreq;
 
 %%
 % Generate the signal that is to be normalized
-a1=10;
-a2=3;
-a3=3;
+sigma = 0.2;
+mu = 0.5;
+a1 = 3;
+a2 = 2;
+a3 = 4;
 % Amplitude value does not matter as it will be changed in the normalization
 A = 1; 
-sigVec = crcbgenqcsig(timeVec,1,[a1,a2,a3]);
+sigVec = otherDTS_2(timeVec,A,sigma,mu,[a1,a2,a3]);
 
 %%
 % We will use the noise PSD used in colGaussNoiseDemo.m but add a constant
@@ -100,3 +101,31 @@ hold on;
 plot(timeVec,sigVec);
 xlabel('Time (sec)');
 ylabel('Data');
+
+%Plot the periodogram of signal and data
+
+% FFT of signal
+fftSig = fft(sigVec);
+% Discard negative frequencies
+fftSig = fftSig(1:kNyq);
+% FFT of data
+fftData = fft(dataVec);
+% Discard negative frequencies
+fftData = fftData(1:kNyq);
+
+% Plot periodogram of the signal and data
+figure;
+plot(posFreq,abs(fftSig));
+hold on;
+plot(posFreq,abs(fftData));
+xlabel('Frequency (Hz)');
+ylabel('|FFT|');
+title('Periodogram');
+
+% Plot spectrogram of data
+[S,F,T]=spectrogram(dataVec,25,24,[],sampFreq);
+figure;
+imagesc(T,F,abs(S));axis xy;
+xlabel('Time (sec)');
+ylabel('Frequency (Hz)');
+title('Spectrogram');

@@ -119,4 +119,3 @@ histogram(glrtH0,'Normalization',"pdf");
 histogram(glrtH1,'Normalization',"pdf")
 legend('H0', 'H1');
 xlabel('GLRT');
-

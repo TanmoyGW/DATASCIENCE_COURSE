@@ -1,4 +1,4 @@
-clc; clear; close;
+clc; close; clear;
 %% How to normalize a signal for a given SNR
 % We will normalize a signal such that the Likelihood ratio (LR) test for it has
 % a given signal-to-noise ratio (SNR) in noise with a given Power Spectral 
@@ -12,7 +12,7 @@ addpath ../NOISE
 
 %%
 % This is the target SNR for the LR
-snr = 10;
+snr = 8.5;
 
 %%
 % Data generation parameters
@@ -20,22 +20,26 @@ nSamples = 2048;
 sampFreq = 1024;
 timeVec = (0:(nSamples-1))/sampFreq;
 
-
 %%
 % Generate the signal that is to be normalized
-a1=10;
-a2=3;
-a3=3;
+sigma = 0.2;
+mu = 0.5;
+a1 = 3;
+a2 = 2;
+a3 = 4;
 % Amplitude value does not matter as it will be changed in the normalization
 A = 1; 
-sigVec = crcbgenqcsig(timeVec,1,[a1,a2,a3]);
+sigVec = otherDTS_2(timeVec,A,sigma,mu,[a1,a2,a3]);
 
 %%
-% We will use the noise PSD used in colGaussNoiseDemo.m but add a constant
-% to remove the parts that are zero. (Exercise: Prove that if the noise PSD
-% is zero at some frequencies but the signal added to the noise is not,
-% then one can create a detection statistic with infinite SNR.)
-noisePSD = @(f) (f>=100 & f<=300).*(f-100).*(300-f)/10000 + 1;
+%Load the target asd
+data = load("iLIGOSensitivity.txt",'-ascii');
+targetASD = data(:,2); % ASD: Amplitude Spectral Density
+freqVec = data(:,1);
+asdVec_1 = targetASD;
+asdVec_1(freqVec <= 50) = targetASD(find(freqVec >= 50, 1, "first"));
+asdVec_1(freqVec >= 700) = targetASD(find(freqVec <= 700, 1, "last"));
+targetPSD = asdVec_1.^2;
 
 %%
 % Generate the PSD vector to be used in the normalization. Should be
@@ -43,12 +47,15 @@ noisePSD = @(f) (f>=100 & f<=300).*(f-100).*(300-f)/10000 + 1;
 dataLen = nSamples/sampFreq;
 kNyq = floor(nSamples/2)+1;
 posFreq = (0:(kNyq-1))*(1/dataLen);
-psdPosFreq = noisePSD(posFreq);
+% We interpolate the PSD which are at irregularly spaced frequencies
+% to the required DFT frequencies
+psdPosFreq = interp1(freqVec, targetPSD, posFreq, 'spline', 'extrap');
 figure;
-plot(posFreq,psdPosFreq);
+loglog(posFreq,psdPosFreq);
 axis([0,posFreq(end),0,max(psdPosFreq)]);
 xlabel('Frequency (Hz)');
 ylabel('PSD ((data unit)^2/Hz)');
+
 
 %% Calculation of the norm
 % Norm of signal squared is inner product of signal with itself
@@ -67,7 +74,7 @@ end
 %Obtain LLR for multiple data (=signal+noise) realizations
 nH1Data = 1000;
 llrH1 = zeros(1,nH1Data);
-for lp = 1:nH0Data
+for lp = 1:nH1Data
     noiseVec = statgaussnoisegen(nSamples,[posFreq(:),psdPosFreq(:)],100,sampFreq);
     % Add normalized signal
     dataVec = noiseVec + sigVec;
@@ -100,3 +107,31 @@ hold on;
 plot(timeVec,sigVec);
 xlabel('Time (sec)');
 ylabel('Data');
+
+%Plot the periodogram of signal and data
+
+% FFT of signal
+fftSig = fft(sigVec);
+% Discard negative frequencies
+fftSig = fftSig(1:kNyq);
+% FFT of data
+fftData = fft(dataVec);
+% Discard negative frequencies
+fftData = fftData(1:kNyq);
+
+% Plot periodogram of the signal and data
+figure;
+plot(posFreq,abs(fftSig));
+hold on;
+plot(posFreq,abs(fftData));
+xlabel('Frequency (Hz)');
+ylabel('|FFT|');
+title('Periodogram');
+
+% Plot spectrogram of data
+[S,F,T]=spectrogram(dataVec,25,24,[],sampFreq);
+figure;
+imagesc(T,F,abs(S));axis xy;
+xlabel('Time (sec)');
+ylabel('Frequency (Hz)');
+title('Spectrogram');

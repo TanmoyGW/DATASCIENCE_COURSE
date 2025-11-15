@@ -22,4 +22,3 @@ normSigSqrd = innerprodpsd(sigVec,sigVec,sampFreq,psdVec);
 normFac = snr/sqrt(normSigSqrd);
 % Normalize signal to specified SNR
 normSigVec = normFac*sigVec;
-
