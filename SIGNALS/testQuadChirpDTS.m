@@ -1,17 +1,15 @@
 %% Generate a quadratic chirp signal:
 
 % Signal parameters
-a1=7;
-a2=5;
-a3=4;
-A = 15;
+P = struct('coef1',10,'coef2',3,'coef3',3);
+A = 10;
 
 % Instantaneous frequency after 1 sec is 
-maxFreq = a1+2*a2+3*a3;
+maxFreq = P.coef1 + 2*P.coef2 + 3*P.coef3;
 %Nyqust frequency guess: 2 * max. instantaneous frequency
 nyqFreq = 2*maxFreq;
 %Sampling frequency
-samplFreq = 2*nyqFreq;
+samplFreq = 5*nyqFreq;
 %samplFreq = 10*nyqFreq;
 samplIntrvl = 1/samplFreq;
 
@@ -22,7 +20,7 @@ timeVec = 0:samplIntrvl:1.0;
 nSamples = length(timeVec);
 
 % Generate the signal
-sigVec = QuadChirpDTS(timeVec,A,[a1,a2,a3]);
+sigVec = QuadChirpDTS(timeVec,A,P);
 
 %Plot the signal 
 figure;
