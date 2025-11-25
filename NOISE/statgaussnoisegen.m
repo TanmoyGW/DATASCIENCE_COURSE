@@ -1,4 +1,3 @@
-%function [inNoise,outNoise] = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
 function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
 %Generate a realization of stationary Gaussian noise with given 2-sided PSD
 %Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
