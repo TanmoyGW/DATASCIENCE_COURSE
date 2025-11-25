@@ -1,4 +1,4 @@
-%% Calculation of GLRT for given data realisations
+%% Calculation of GLRT for given data realizations
 clear; close; clc;
 addpath ../SIGNALS
 addpath ../NOISE
