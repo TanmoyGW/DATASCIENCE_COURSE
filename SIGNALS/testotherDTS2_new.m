@@ -1,5 +1,4 @@
 % Signal Parameters
-% P = struct('coef1',a_1,'coef2',a_2,'coef3',a_3,'mean',mu,'sd',sigma);
 P = struct('coef1',3,'coef2',2,'coef3',4,'mean',0.5,'sd',0.2);
 A = 10; % SNR
 
@@ -25,9 +24,9 @@ plot(timeVec,sigVec,'Marker','.','MarkerSize',24);
 xlabel('Time (sec)');
 title('Signal Time Series');
 
-%Plot the periodogram 
-dataLen = timeVec(end)-timeVec(1);
-%DFT sample corresponding to Nyquist frequency
+% Plot the periodogram 
+dataLen = nSamples/sampFreq;
+% DFT sample corresponding to Nyquist frequency
 kNyq = floor(nSamples/2)+1;
 % Positive Fourier frequencies
 posFreq = (0:(kNyq-1))*(1/dataLen);
